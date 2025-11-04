@@ -1,0 +1,4 @@
+$0001;Nin;0363894957;Long An
+$0002;Nam;098765432; Tien Giang
+$0003;Minh;013924738; Dong Thap
+$0004;Anh;029495375; Thanh Pho Ho Chi Minh
