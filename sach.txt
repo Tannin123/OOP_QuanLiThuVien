@@ -1,3 +1,10 @@
-Sach giao khoa;$0001;Toan hoc 10;NXB Giao duc;2020;false;Toan học
+Sach giao khoa;$0001;Toan hoc 10;NXB Giao duc;2020;false;Toan hoc
 Tai lieu tham khao;$0002;Lap trinh Java;NXB Thong Ke;2021;false;Cong nghe
 Sach giao khoa;$0003;Toan hoc;GIAO DUC;2006;false;Toan
+Sach giao khoa;$0004;Vat ly 10;NXB Giao duc;2020;false;Vat ly
+Sach giao khoa;$0005;Hoa hoc 10;NXB Giao duc;2021;false;Hoa hoc
+Sach giao khoa;$0006;Ngu van 11;NXB Dai hoc Quoc gia;2022;false;Ngu van
+Sach giao khoa;$0007;Lich su 12;NXB Giao duc;2019;false;Lich su
+Tai lieu tham khao;$0008;Huong dan giai bai tap Toan 10;NXB Tre;2020;false;Toan hoc
+Tai lieu tham khao;$0009;Cau truc du lieu va giai thuat;NXB Thong Ke;2023;false;Cong nghe
+Sach giao khoa;$0010;Dia ly 12;NXB Giao duc;2018;false;Dia ly

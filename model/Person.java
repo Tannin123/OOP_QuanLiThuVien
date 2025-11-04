@@ -38,6 +38,6 @@ public abstract void hienThiVaiTro();
 @Override 
 public String toString()
 {
-   return "ID: " + id + " | Ten: " + hoTen + " | SĐT: " + soDienThoai + " | Dia chi: " + diaChi;
+   return "ID: " + id + " | Ten: " + hoTen + " | SDT: " + soDienThoai + " | Dia chi: " + diaChi;
 }
 }
