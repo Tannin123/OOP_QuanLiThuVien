@@ -1,9 +1,11 @@
 import model.NguoiDoc;
+import model.PhieuMuon; 
 import model.Sach;
 import model.SachGiaoKhoa;
 import model.TaiLieu;
 import model.ThuThu;
 import service.QuanLyNguoiDoc;
+import service.QuanLyPhieuMuon; 
 import service.QuanLySach;
 
 import java.util.ArrayList;
@@ -13,7 +15,10 @@ import java.util.Scanner;
 public class Main {
 
     // Service để quản lý các nghiệp vụ liên quan đến sách
-    private static final QuanLySach qltv = new QuanLySach();
+    private static final QuanLySach qltv = new QuanLySach(); 
+    
+    // Service để quản lý phiếu mượn
+    private static final QuanLyPhieuMuon quanLyPM = new QuanLyPhieuMuon();
     
     // Service để quản lý người đọc
     private static final QuanLyNguoiDoc quanLyND = new QuanLyNguoiDoc();
@@ -23,7 +28,7 @@ public class Main {
     public static void main(String[] args) {
         // --- Khởi tạo dữ liệu người dùng mẫu ---
         // Tạo một người quản lý (Thủ thư) mặc định để đăng nhập
-        danhSachNguoiQuanLy.add(new ThuThu("TT01", "Anh Admin", "0909090909", "TP.HCM", "admin", "123"));
+        danhSachNguoiQuanLy.add(new ThuThu("TT01", " Admin", "0909090909", "TP.HCM", "admin", "123"));
 
         Scanner sc = new Scanner(System.in);
         
@@ -70,7 +75,8 @@ public class Main {
             System.out.println("||          MENU CHINH         ||");
             System.out.println("=================================");
             System.out.println("|| 1. Quan ly Sach             ||");
-            System.out.println("|| 2. Quan ly Nguoi Doc        ||");
+            System.out.println("|| 2. Quan ly Phieu Muon       ||");
+            System.out.println("|| 3. Quan ly Nguoi Doc        ||");
             System.out.println("|| 0. Luu va Thoat             ||");
             System.out.println("=================================");
             System.out.print("=> Lua chon cua ban: ");
@@ -82,11 +88,15 @@ public class Main {
                     menuQuanLySach(sc);
                     break;
                 case "2":
+                    menuQuanLyPhieuMuon(sc);
+                    break;
+                case "3":
                     menuQuanLyNguoiDoc(sc);
                     break;
                 case "0":
                     System.out.println("Dang luu du lieu...");
                     qltv.luuThayDoiVaoFile();
+                    quanLyPM.luuFilePhieuMuon();
                     quanLyND.luuThayDoiVaoFile();
                     return; // Thoát khỏi menu chính và kết thúc chương trình
                 default:
@@ -125,7 +135,7 @@ public class Main {
                     timSach(sc);
                     break;
                 case "5":
-                    qltv.hienThiDanhSach();
+                    qltv.xemDanhSachSach();
                     break;
                 case "0":
                     return;
@@ -208,6 +218,99 @@ public class Main {
         } else {
             System.out.println("=> Tim thay " + ketQua.size() + " ket qua:");
             ketQua.forEach(System.out::println);
+        }
+    }
+
+    /**
+     * Menu dành riêng cho việc quản lý phiếu mượn
+     */
+    private static void menuQuanLyPhieuMuon(Scanner sc) {
+        while (true) {
+            System.out.println("\n--- MENU QUAN LY PHIEU MUON ---");
+            System.out.println("1. Tao phieu muon moi");
+            System.out.println("2. Ghi nhan tra sach");
+            System.out.println("3. Hien thi danh sach phieu muon");
+            System.out.println("0. Quay lai Menu Chinh");
+            System.out.print("=> Lua chon cua ban: ");
+
+            String choice = sc.nextLine();
+
+            switch (choice) {
+                case "1":
+                    themMoiPhieuMuon(sc);
+                    break;
+                case "2":
+                    ghiNhanTraSach(sc);
+                    break;
+                case "3":
+                    quanLyPM.hienThiDanhSach();
+                    break;
+                case "0":
+                    return;
+                default:
+                    System.out.println("=> Lua chon khong hop le. Vui long chon lai.");
+            }
+        }
+    }
+    
+    /**
+     * Chức năng thêm một phiếu mượn mới
+     */
+    private static void themMoiPhieuMuon(Scanner sc) {
+        System.out.println("\n--- THEM PHIEU MUON MOI ---");
+        System.out.print("Nhap ID nguoi doc: ");
+        String idNguoiDoc = sc.nextLine();
+
+        // Kiểm tra người đọc có tồn tại không
+        if (quanLyND.timNguoiDocTheoId(idNguoiDoc) == null) {
+            System.out.println("=> Loi: Khong tim thay nguoi doc voi ID nay.");
+            return;
+        }
+
+        System.out.print("Nhap ID sach muon: ");
+        String idSach = sc.nextLine();
+
+        // Kiểm tra xem sách có tồn tại không
+        Sach sach = qltv.timSachTheoId(idSach);
+        if (sach == null) {
+            System.out.println("=> Loi: Khong tim thay sach voi ID nay trong thu vien.");
+            return;
+        }
+
+        // Kiểm tra sách đã được mượn chưa
+        if (sach.isDaMuon()) {
+            System.out.println("=> Loi: Sach nay da duoc muon roi.");
+            return;
+        }
+
+        // Tạo phiếu mượn và cập nhật trạng thái sách
+        PhieuMuon phieuMoi = new PhieuMuon(idNguoiDoc, idSach);
+        quanLyPM.themPhieuMuon(phieuMoi);
+        sach.setDaMuon(true);
+    }
+    
+    /**
+     * Chức năng ghi nhận một cuốn sách đã được trả
+     */
+    private static void ghiNhanTraSach(Scanner sc) {
+        System.out.println("\n--- GHI NHAN TRA SACH ---");
+        System.out.print("Nhap ID phieu muon can tra: ");
+        String idPhieu = sc.nextLine();
+
+        PhieuMuon phieuCanTra = quanLyPM.timPhieuMuonChuaTra(idPhieu);
+
+        if (phieuCanTra != null) {
+            phieuCanTra.setDaTra(true);
+            
+            // Cập nhật trạng thái sách về chưa mượn
+            Sach sach = qltv.timSachTheoId(phieuCanTra.getIdSach());
+            if (sach != null) {
+                sach.setDaMuon(false);
+            }
+            
+            System.out.println("=> Da ghi nhan tra sach thanh cong cho phieu " + idPhieu);
+        } else {
+            System.out.println("=> Loi: Khong tim thay phieu muon co ID nay hoac phieu da duoc tra truoc do.");
         }
     }
 

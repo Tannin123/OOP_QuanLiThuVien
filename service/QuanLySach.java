@@ -1,5 +1,6 @@
 package service;
 
+import interfaces.IQuanLy; // <-- Import interface mới
 import model.Sach;
 import model.SachGiaoKhoa;
 import model.TaiLieu;
@@ -9,7 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class QuanLySach {
+// Cho lớp triển khai interface IQuanLySach
+public class QuanLySach implements IQuanLy {
     
     private List<Sach> danhSachSach;
     private static final String FILE_PATH = "sach.txt";
@@ -18,11 +20,13 @@ public class QuanLySach {
         this.danhSachSach = docFile();
     }
 
+    @Override
     public void themSach(Sach sach) {
         this.danhSachSach.add(sach);
         System.out.println("=> Da them sach moi thanh cong: " + sach.getTenSach());
     }
     
+    @Override
     public boolean suaSach(String id, String tenMoi, String nxbMoi, int namMoi) {
         Sach sachCanSua = timSachTheoId(id);
         if (sachCanSua != null) {
@@ -36,6 +40,7 @@ public class QuanLySach {
         return false;
     }
 
+    @Override
     public boolean xoaSach(String id) {
         boolean removed = this.danhSachSach.removeIf(sach -> sach.getId().equalsIgnoreCase(id));
         if (removed) {
@@ -46,6 +51,7 @@ public class QuanLySach {
         return removed;
     }
     
+    @Override
     public Sach timSachTheoId(String id) {
         for (Sach sach : this.danhSachSach) {
             if (sach.getId().equalsIgnoreCase(id)) {
@@ -61,7 +67,8 @@ public class QuanLySach {
                 .collect(Collectors.toList());
     }
 
-    public void hienThiDanhSach() {
+    @Override
+    public void xemDanhSachSach() { // <-- Đổi tên từ hienThiDanhSach
         System.out.println("\n--- DANH SACH SACH TRONG THU VIEN ---");
         if (danhSachSach.isEmpty()) {
             System.out.println("Thu vien hien dang trong.");
@@ -85,9 +92,10 @@ public class QuanLySach {
     }
     
     /**
-     *  ĐÃ SỬA: Đọc file và GIỮ NGUYÊN ID gốc
+     * ĐÃ SỬA: Đọc file và GIỮ NGUYÊN ID gốc
      */
     private List<Sach> docFile() {
+        // ... (Giữ nguyên phần code đọc file của bạn) ...
         List<Sach> danhSachDocDuoc = new ArrayList<>();
         File file = new File(FILE_PATH);
         if (!file.exists()) {
@@ -120,7 +128,6 @@ public class QuanLySach {
 
                 Sach sach = null;
                 
-                //  So sánh CÓ DẤU và sử dụng constructor mới
                 if (loaiSach.equals("Sach giao khoa")) {
                     sach = new SachGiaoKhoa(idFromFile, tenSach, nxb, namXB, daMuon, thuocTinhRieng);
                 } else if (loaiSach.equals("Tai lieu tham khao")) {
@@ -132,7 +139,6 @@ public class QuanLySach {
                 if (sach != null) {
                     danhSachDocDuoc.add(sach);
                     
-                    // Cập nhật maxID
                     try {
                         int currentIdNum = Integer.parseInt(idFromFile.substring(1)); // Bỏ ký tự "$"
                         if (currentIdNum > maxIdFromFile) {
@@ -149,7 +155,6 @@ public class QuanLySach {
             e.printStackTrace();
         }
         
-        // Đồng bộ nextID để tránh trùng lặp
         Sach.capNhatNextId(maxIdFromFile);
         
         return danhSachDocDuoc;
