@@ -62,10 +62,16 @@ public class QuanLySach implements IQuanLy {
     }
     
     public List<Sach> timSachTheoTen(String keyword) {
-        return this.danhSachSach.stream()
-                .filter(sach -> sach.getTenSach().toLowerCase().contains(keyword.toLowerCase()))
-                .collect(Collectors.toList());
-    }
+    // 1. Làm sạch từ khóa (keyword) người dùng nhập
+    String cleanKeyword = keyword.toLowerCase().trim(); 
+    
+    return this.danhSachSach.stream()
+            .filter(sach -> sach.getTenSach()
+                                .toLowerCase()
+                                .trim() 
+                                .contains(cleanKeyword)) 
+            .collect(Collectors.toList());
+}
 
     @Override
     public void xemDanhSachSach() { // <-- Đổi tên từ hienThiDanhSach
