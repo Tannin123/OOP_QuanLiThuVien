@@ -14,14 +14,12 @@ import java.util.Scanner;
 
 public class Main {
 
-    // Service để quản lý các nghiệp vụ liên quan đến sách
-    private static final QuanLySach qltv = new QuanLySach(); 
-    
-    // Service để quản lý phiếu mượn
-    private static final QuanLyPhieuMuon quanLyPM = new QuanLyPhieuMuon();
-    
-    // Service để quản lý người đọc
-    private static final QuanLyNguoiDoc quanLyND = new QuanLyNguoiDoc();
+    // Service để quản lý các nghiệp vụ liên quan đến sách 
+   private static final QuanLySach qltv = new QuanLySach();
+
+   private static final QuanLyPhieuMuon quanLyPM = new QuanLyPhieuMuon();      
+
+   private static final QuanLyNguoiDoc quanLyND = new QuanLyNguoiDoc();
 
     private static final List<ThuThu> danhSachNguoiQuanLy = new ArrayList<>();
 
@@ -196,7 +194,7 @@ public class Main {
             int namMoi = Integer.parseInt(sc.nextLine());
             
             qltv.suaSach(id, tenMoi, nxbMoi, namMoi);
-        } catch (NumberFormatException e) {
+        } catch (NumberFormatException e) {  
             System.err.println("Loi: Nam xuat ban phai la mot so.");
         }
     }

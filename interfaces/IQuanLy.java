@@ -12,6 +12,6 @@ public interface IQuanLy {
     
     void xemDanhSachSach();
     
-    Sach timSachTheoId(String id);
+    void timSachTheoId(String id);
 
 }

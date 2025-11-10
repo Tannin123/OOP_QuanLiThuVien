@@ -9,8 +9,8 @@ import java.util.List;
 
 public class QuanLyNguoiDoc {
     
-    private List<NguoiDoc> danhSachNguoiDoc;
-    private static final String FILE_PATH = "nguoidoc.txt";
+    private List<NguoiDoc> danhSachNguoiDoc;  
+    private static final String FILE_PATH = "nguoidoc.txt";  
 
     /**
      * Constructor: Tự động tải dữ liệu từ file khi khởi tạo.
